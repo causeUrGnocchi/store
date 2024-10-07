@@ -1,4 +1,4 @@
-module causeurgnocchi/shop
+module causeurgnocchi/store
 
 go 1.23.1
 
