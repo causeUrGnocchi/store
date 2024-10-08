@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"embed"
 	"html/template"
 	"log"
 	"net/http"
@@ -26,12 +25,11 @@ type DepartmentPageData struct {
 }
 
 type DepartmentHandler struct {
-	Assets embed.FS
 	Db *sql.DB
 }
 
 func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	tmpl := template.Must(template.ParseFS(h.Assets, "assets/html/department.html"))
+	tmpl := template.Must(template.ParseFiles("assets/html/department.html"))
 		
 	rows, err := h.Db.Query("select id, name from departments")
 	if err != nil {
@@ -46,7 +44,7 @@ func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		departments = append(departments, d)
+		departments = append([]Department{d}, departments...)
 	}
 
 	data := DepartmentPageData {

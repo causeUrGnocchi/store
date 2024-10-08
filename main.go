@@ -3,7 +3,6 @@ package main
 import (
 	"causeurgnocchi/store/handlers"
 	"database/sql"
-	"embed"
 	"log"
 	"net/http"
 
@@ -12,8 +11,6 @@ import (
 
 const ConnectionString = "root:example@(localhost)/store?parseTime=true"
 
-//go:embed assets
-var assets embed.FS
 var db *sql.DB
 
 func main() {
@@ -28,13 +25,10 @@ func main() {
         }
     }
 
-    {
-        fs := http.FileServer(http.Dir("assets"))
-        http.Handle("/static/", http.StripPrefix("/static/", fs))
-    }
+    assets := http.FileServer(http.Dir("assets"))
+    http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 
 	http.Handle("/", handlers.DepartmentHandler{
-        Assets: assets,
         Db: db,
     })
 
