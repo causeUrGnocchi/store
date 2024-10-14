@@ -13,18 +13,18 @@
     <header>
         <h1>Store</h1>
     </header>
-    <div class="panel">
-        <div class="display">
-            <span class="display-foreground">{{.DepartmentId}}</span>
-        </div>
-        <nav>
+    <div class="sidebar">
+        <nav class="panel">
+            <p class="panel-display">
+                <span>{{.DepartmentId}}</span>
+            </p>
             <ul>
                 {{range .Departments}}
                     <li>
                         <a href={{printf "/departments/%d" .Id}} class="panel-dial">
-                            <span>{{.Id}}</span>
+                            <p>{{.Id}}</p>
                         </a>
-                        <a href={{printf "/departments/%d" .Id}}>{{.Name}}</a>
+                        <a href={{printf "/departments/%d" .Id}} class="panel-label">{{.Name}}</a>
                     </li>
                 {{end}}
             </ul>
@@ -32,8 +32,10 @@
     </div>
     <ul class="catalog">
         {{range .Products}}
-            <li class="catalog-item">
+            <li class="product">
                 <img src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}>
+                <p class="product-name">{{.Name}}</p>
+                <p class="product-price">${{.Price}}</p>
             </li>
         {{end}}
     </ul>
