@@ -28,9 +28,11 @@ func main() {
     assets := http.FileServer(http.Dir("assets"))
     http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 
-	http.Handle("/", handlers.DepartmentHandler{
-        Db: db,
-    })
+	http.Handle("/", http.RedirectHandler("/departments/1", 302))
+
+	http.Handle("/departments/{id}", handlers.DepartmentHandler{
+		Db: db,
+	})
 
 	http.ListenAndServe(":8080", nil)
 }

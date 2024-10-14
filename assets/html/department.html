@@ -13,17 +13,29 @@
     <header>
         <h1>Store</h1>
     </header>
-    <div class="content">
-        <nav class="sidebar">
+    <div class="panel">
+        <div class="display">
+            <span class="display-foreground">{{.DepartmentId}}</span>
+        </div>
+        <nav>
             <ul>
                 {{range .Departments}}
-                    <li><a href="/">{{.Name}}</a></li>
+                    <li>
+                        <a href={{printf "/departments/%d" .Id}} class="panel-dial">
+                            <span>{{.Id}}</span>
+                        </a>
+                        <a href={{printf "/departments/%d" .Id}}>{{.Name}}</a>
+                    </li>
                 {{end}}
             </ul>
         </nav>
-        <ul class="catalog">
-    
-        </ul>
     </div>
+    <ul class="catalog">
+        {{range .Products}}
+            <li class="catalog-item">
+                <img src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}>
+            </li>
+        {{end}}
+    </ul>
 </body>
 </html>

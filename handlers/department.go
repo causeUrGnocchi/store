@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type Department struct {
@@ -22,6 +23,7 @@ type Product struct {
 type DepartmentPageData struct {
     Products []Product
     Departments []Department
+	DepartmentId int
 }
 
 type DepartmentHandler struct {
@@ -29,7 +31,11 @@ type DepartmentHandler struct {
 }
 
 func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	tmpl := template.Must(template.ParseFiles("assets/html/department.html"))
+	tmpl := template.Must(template.New("department.html").Funcs(template.FuncMap{
+		"decrement": func(a int, b int) int {
+			return a - b
+		},
+	}).ParseFiles("assets/html/department.html"))
 		
 	rows, err := h.Db.Query("select id, name from departments")
 	if err != nil {
@@ -47,9 +53,15 @@ func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		departments = append([]Department{d}, departments...)
 	}
 
+	id, err := strconv.Atoi(req.PathValue("id"))
+	if (err != nil) {
+		id = 1
+	}
+
 	data := DepartmentPageData {
-		Products: h.productsByDepartment(1),
+		Products: h.productsByDepartment(id),
 		Departments: departments,
+		DepartmentId: id,
 	}
 	tmpl.Execute(w, data)
 }
