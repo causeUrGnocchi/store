@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store</title>
+    <title>{{.Department.Name}} - Store</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,15 +16,15 @@
     <div class="sidebar">
         <nav class="panel">
             <p class="panel-display">
-                <span>{{.DepartmentId}}</span>
+                <span>{{.Department.Id}}</span>
             </p>
             <ul>
                 {{range .Departments}}
                     <li>
-                        <a href={{printf "/departments/%d" .Id}} class="panel-dial">
+                        <a href={{toLower .Name | printf "/departments/%s"}} class="panel-dial">
                             <p>{{.Id}}</p>
                         </a>
-                        <a href={{printf "/departments/%d" .Id}} class="panel-label">{{.Name}}</a>
+                        <a href={{toLower .Name | printf "/departments/%s"}} class="panel-label">{{.Name}}</a>
                     </li>
                 {{end}}
             </ul>
@@ -33,9 +33,9 @@
     <ul class="catalog">
         {{range .Products}}
             <li class="product">
-                <img src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}>
-                <p class="product-name">{{.Name}}</p>
-                <p class="product-price">${{.Price}}</p>
+                <a href={{kebabCase .Name | printf "/%s"}}><img src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}></a>
+                <a href={{kebabCase .Name | printf "/%s"}} class="product-name">{{.Name}}</a>
+                <p>${{.Price}}</p>
             </li>
         {{end}}
     </ul>

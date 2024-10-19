@@ -5,7 +5,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strconv"
+	"strings"
+	"causeurgnocchi/store/models"
 )
 
 type Department struct {
@@ -13,30 +14,17 @@ type Department struct {
 	Name     string
 }
 
-type Product struct {
-	Id           int
-	Name         string
-	Description  string
-	Price        float32
-}
-
 type DepartmentPageData struct {
-    Products []Product
+	Department Department
+    Products []models.Product
     Departments []Department
-	DepartmentId int
 }
 
 type DepartmentHandler struct {
 	Db *sql.DB
 }
 
-func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	tmpl := template.Must(template.New("department.html").Funcs(template.FuncMap{
-		"decrement": func(a int, b int) int {
-			return a - b
-		},
-	}).ParseFiles("assets/html/department.html"))
-		
+func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	rows, err := h.Db.Query("select id, name from departments")
 	if err != nil {
 		log.Fatal(err)
@@ -53,30 +41,40 @@ func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		departments = append([]Department{d}, departments...)
 	}
 
-	id, err := strconv.Atoi(req.PathValue("id"))
-	if (err != nil) {
-		id = 1
+	name := r.PathValue("name")
+	products := h.productsByDepartment(name)
+
+	var department Department
+	for _, d := range(departments) {
+		if strings.ToLower(d.Name) == name {
+			department = d
+			break
+		}
 	}
 
-	data := DepartmentPageData {
-		Products: h.productsByDepartment(id),
+	tmpl := template.Must(template.New("department.html").Funcs(template.FuncMap{
+		"toLower": strings.ToLower,
+		"kebabCase": func (s string) string { return strings.ReplaceAll(strings.ToLower(s), " ", "-") },
+	}).ParseFiles("assets/html/department.html"))
+	data := DepartmentPageData{
+		Department: department,
+		Products: products,
 		Departments: departments,
-		DepartmentId: id,
 	}
 	tmpl.Execute(w, data)
 }
 
 
-func (h DepartmentHandler) productsByDepartment(department int) []Product {
-	rows, err := h.Db.Query("select id, name, description, price from products where department_id = ?", department)
+func (h DepartmentHandler) productsByDepartment(name string) []models.Product {
+	rows, err := h.Db.Query("select p.id, p.name, p.description, p.price from products p inner join departments d on p.department_id = d.id and d.name = ?", name)
 	if (err != nil) {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 
-	var products []Product
+	var products []models.Product
 	for rows.Next() {
-		var p Product
+		var p models.Product
 		err := rows.Scan(&p.Id, &p.Name, &p.Description, &p.Price)
 		if err != nil {
 			log.Fatal(err)

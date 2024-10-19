@@ -28,9 +28,13 @@ func main() {
     assets := http.FileServer(http.Dir("assets"))
     http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 
-	http.Handle("/", http.RedirectHandler("/departments/1", 302))
+	http.Handle("/", http.RedirectHandler("/departments/food", http.StatusFound))
 
-	http.Handle("/departments/{id}", handlers.DepartmentHandler{
+	http.Handle("/departments/{name}", handlers.DepartmentHandler{
+		Db: db,
+	})
+
+	http.Handle("/{product}", handlers.ProductHandler{
 		Db: db,
 	})
 
