@@ -13,6 +13,7 @@ type ProductHandler struct{
 }
 
 type ProductPageData struct{
+	PageTitle string
 	Product models.Product
 }
 
@@ -27,10 +28,11 @@ func (h ProductHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rows.Scan(&product.Name, &product.Description, &product.Price)
 	}
 
-	tmpl := template.Must(template.ParseFiles("assets/html/product.html"))
+	tmpl := template.Must(template.New("product.tmpl").ParseFiles("assets/html/base.html", "assets/html/product.html"))
 	data := ProductPageData{
+		PageTitle: product.Name + " - Store",
 		Product: product, 
 	}
 
-	tmpl.Execute(w, data)
+	tmpl.ExecuteTemplate(w, "base", data)
 }

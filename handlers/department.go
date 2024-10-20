@@ -15,6 +15,7 @@ type Department struct {
 }
 
 type DepartmentPageData struct {
+	PageTitle string
 	Department Department
     Products []models.Product
     Departments []Department
@@ -52,16 +53,19 @@ func (h DepartmentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	tmpl := template.Must(template.New("department.html").Funcs(template.FuncMap{
+	tmpl := template.Must(template.New("department.tmpl").Funcs(template.FuncMap{
 		"toLower": strings.ToLower,
 		"kebabCase": func (s string) string { return strings.ReplaceAll(strings.ToLower(s), " ", "-") },
-	}).ParseFiles("assets/html/department.html"))
+	}).ParseFiles("assets/html/base.html", "assets/html/department.html"))
+
 	data := DepartmentPageData{
+		PageTitle: department.Name + " - Store",
 		Department: department,
 		Products: products,
 		Departments: departments,
 	}
-	tmpl.Execute(w, data)
+
+	tmpl.ExecuteTemplate(w, "base", data)
 }
 
 

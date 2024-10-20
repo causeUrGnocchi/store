@@ -1,43 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.Department.Name}} - Store</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header>
-        <h1>Store</h1>
-    </header>
-    <div class="sidebar">
-        <nav class="panel">
-            <p class="panel-display">
-                <span>{{.Department.Id}}</span>
-            </p>
-            <ul>
-                {{range .Departments}}
-                    <li>
-                        <a href={{toLower .Name | printf "/departments/%s"}} class="panel-dial">
-                            <p>{{.Id}}</p>
-                        </a>
-                        <a href={{toLower .Name | printf "/departments/%s"}} class="panel-label">{{.Name}}</a>
-                    </li>
-                {{end}}
-            </ul>
-        </nav>
-    </div>
-    <ul class="catalog">
-        {{range .Products}}
-            <li class="product">
-                <a href={{kebabCase .Name | printf "/%s"}}><img src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}></a>
-                <a href={{kebabCase .Name | printf "/%s"}} class="product-name">{{.Name}}</a>
-                <p>${{.Price}}</p>
-            </li>
-        {{end}}
-    </ul>
-</body>
-</html>
+{{define "content"}}
+<div class="sidebar">
+    <nav class="panel">
+        <p class="panel-display">
+            <span>{{.Department.Id}}</span>
+        </p>
+        <ul>
+            {{range .Departments}}
+                <li>
+                    <a href={{toLower .Name | printf "/departments/%s"}} class="panel-dial">
+                        <p>{{.Id}}</p>
+                    </a>
+                    <a href={{toLower .Name | printf "/departments/%s"}} class="panel-label">{{.Name}}</a>
+                </li>
+            {{end}}
+        </ul>
+    </nav>
+</div>
+<ul class="catalog">
+    {{range .Products}}
+        <li class="product">
+            <a href={{kebabCase .Name | printf "/%s"}} class="product-image"><img src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}></a>
+            <a href={{kebabCase .Name | printf "/%s"}} class="product-name">{{.Name}}</a>
+            <p>${{.Price}}</p>
+        </li>
+    {{end}}
+</ul>
+{{end}}
