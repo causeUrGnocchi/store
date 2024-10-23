@@ -20,9 +20,9 @@
     <ul class="catalog">
         {{range .Products}}
             <li class="product">
-                <a href={{kebabCase .Name | printf "/%s"}} class="product-image"><img src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}></a>
+                <a href={{kebabCase .Name | printf "/%s"}} class="product-image-wrapper"><img class="product-image" src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}></a>
                 <a href={{kebabCase .Name | printf "/%s"}} class="product-name">{{.Name}}</a>
-                <p>${{.Price}}</p>
+                <p class="product-price">${{.Price}}</p>
             </li>
         {{end}}
     </ul>
