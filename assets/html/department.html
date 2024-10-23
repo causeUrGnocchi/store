@@ -1,5 +1,5 @@
 {{define "content"}}
-<div class="content-department">
+<div class="department-content">
     <div class="sidebar">
         <nav class="panel">
             <p class="panel-display">
@@ -19,10 +19,10 @@
     </div>
     <ul class="catalog">
         {{range .Products}}
-            <li class="product">
-                <a href={{kebabCase .Name | printf "/%s"}} class="product-image-wrapper"><img class="product-image" src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}></a>
-                <a href={{kebabCase .Name | printf "/%s"}} class="product-name">{{.Name}}</a>
-                <p class="product-price">${{.Price}}</p>
+            <li class="catalog-product">
+                <a href={{kebabCase .Name | printf "/%s"}} class="catalog-product-image-wrapper"><img class="catalog-product-image" src={{printf "/assets/imgs/%s.jpeg" .Name}} alt={{.Name}}></a>
+                <a href={{kebabCase .Name | printf "/%s"}} class="catalog-product-name">{{.Name}}</a>
+                <p class="catalog-product-price">${{.Price}}</p>
             </li>
         {{end}}
     </ul>
