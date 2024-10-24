@@ -1,6 +1,7 @@
 {{define "content"}}
 <div class="product-content">
     <img class="product-image" src={{printf "assets/imgs/%s.jpeg" .Product.Name}} alt={{.Product.Name}}>
-    <p class="product-name"></p>
+    <h2 class="product-name">{{.Product.Name}}</h2>
+    <p class="product-description">{{.Product.Description}}</p>
 </div>
 {{end}}
