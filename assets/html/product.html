@@ -2,9 +2,10 @@
 <div class="product-content">
     <img class="product-image" src={{printf "assets/imgs/%s.jpeg" .Product.Name}} alt={{.Product.Name}}>
     <div class="product-text">
-        <div class=""></div>
-        <h2 class="product-name">{{.Product.Name}}</h2>
-        <p class="product-price">{{.Product.Price}}</p>
+        <div class="product-tag">
+            <h2 class="product-name">{{.Product.Name}}</h2>
+            <p class="product-price">{{.Product.Price}}</p>
+        </div>
         <p class="product-description">{{.Product.Description}}</p>
     </div>
 </div>
