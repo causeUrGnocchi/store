@@ -1,7 +1,3 @@
-## Introduction
-
-This is a website for a department store built on go and htmx.
-
 ## Requirements
 
 - go
